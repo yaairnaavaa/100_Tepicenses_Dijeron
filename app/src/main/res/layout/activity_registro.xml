@@ -7,8 +7,7 @@
     android:orientation="vertical"
     android:background="@drawable/fondoi"
     android:padding="10dp"
-    tools:context="mx.edu.ittepic.a100_tepicenses_dijeron.MainActivity">
-
+    tools:context="mx.edu.ittepic.a100_tepicenses_dijeron.Registro">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="500px"
@@ -18,28 +17,25 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:descendantFocusability="beforeDescendants"
-            android:focusableInTouchMode="true"
-            >
+            android:orientation="vertical">
             <LinearLayout
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@drawable/rectangulo"
+                android:background="@drawable/shape"
+                android:backgroundTint="#FFFFFF"
                 >
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Usuario"
+                    android:hint="Nombre Completo"
                     android:inputType="text"
                     android:layout_weight="2"
                     android:background="@null"
@@ -53,19 +49,48 @@
                     android:layout_margin="5dp"
                     />
             </LinearLayout>
+
             <LinearLayout
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@drawable/rectangulo"
+                android:backgroundTint="#FFFFFF"
+                android:background="@drawable/shape"
                 >
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Contraseña"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:layout_weight="2"
+                    android:background="@null"
+                    android:layout_gravity="center"
+                    android:gravity="center_horizontal"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:src="@drawable/contra"
+                    android:layout_margin="5dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:backgroundTint="#FFFFFF"
+                android:background="@drawable/shape"
+                >
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Confirmar Password"
                     android:inputType="textPassword"
                     android:layout_weight="2"
                     android:background="@null"
@@ -81,41 +106,26 @@
             </LinearLayout>
             <Button
                 android:layout_marginTop="50dp"
-                android:id="@+id/entrar"
+                android:id="@+id/registrar"
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Iniciar Sesión"
+                android:text="Registrar"
                 android:background="@drawable/shape"
                 android:backgroundTint="#582187"
                 android:textColor="#FFFFFF"
                 android:textSize="20dp"
                 />
-            <LinearLayout
-                android:layout_margin="20dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                >
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/mas"
+                    android:background="@drawable/back"
+                    android:layout_gravity="right"
+                    android:id="@+id/back"
                     />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Crear Cuenta"
-                    android:id="@+id/registro"
-                    android:textSize="15dp"
-                    android:gravity="center"
-                    android:textColor="#470bd2"
-                    android:layout_marginLeft="10dp"
-                    />
-            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
 
 </LinearLayout>
+
