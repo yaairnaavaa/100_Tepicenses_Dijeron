@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/fondoi"
+    android:padding="15dp"
+    tools:context="mx.edu.ittepic.a100_tepicenses_dijeron.Creditos">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:paddingTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Taller de Programación
+para Dispositivos Móviles"
+                android:textSize="30dp"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:gravity="center"
+                />
+            <TextView
+                android:paddingTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Equipo:"
+                android:textSize="30dp"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:paddingTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Barajas Valdivia Agustin\nNava Hernández Irving Yair"
+                android:textSize="20dp"
+                android:textColor="#000000"
+                />
+            <TextView
+                android:paddingTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Docente:\nMTI. Castillo Valtierra Sergio Benigno"
+                android:textSize="30dp"
+                android:textColor="#000000"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/back"
+                android:layout_marginTop="50dp"
+                android:layout_gravity="right"
+                android:id="@+id/atras"
+                />
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>
