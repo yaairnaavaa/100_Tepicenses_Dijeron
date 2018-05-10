@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/fondoi"
-    android:padding="10dp"
+    android:padding="25dp"
     tools:context="mx.edu.ittepic.a100_tepicenses_dijeron.MainActivity">
 
     <ImageView
