@@ -57,7 +57,7 @@
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Salir"
+        android:text="Cerrar Sesión"
         android:background="@drawable/shape"
         android:backgroundTint="#582187"
         android:textColor="#FFFFFF"

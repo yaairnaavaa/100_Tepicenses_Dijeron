@@ -1,10 +1,15 @@
 package mx.edu.ittepic.a100_tepicenses_dijeron;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+
+import static java.security.AccessController.getContext;
 
 public class Principal extends AppCompatActivity {
     Button botoncreditos;
@@ -39,9 +44,25 @@ public class Principal extends AppCompatActivity {
         botonsalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
-                Intent salir = new Intent(Principal.this, MainActivity.class);
-                startActivity(salir);
+                AlertDialog.Builder builder = new AlertDialog.Builder(Principal.this);
+                builder.setTitle("¿Seguro que desea cerrar sesión?");
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        Intent salir = new Intent(Principal.this, MainActivity.class);
+                        startActivity(salir);
+                    }
+                });
+
+                builder.show();
+
             }
         });
     }
