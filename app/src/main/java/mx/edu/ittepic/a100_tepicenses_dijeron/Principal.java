@@ -23,7 +23,6 @@ public class Principal extends AppCompatActivity {
         botonranking = findViewById(R.id.ranking);
         botonsalir = findViewById(R.id.cerrarsesion);
 
-
         botoncreditos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,5 +64,27 @@ public class Principal extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert
+            .setTitle("¿Desea cerrar la sesión?")
+            .setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Principal.super.onBackPressed();
+                }
+            })
+            .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            })
+            .setCancelable(false)
+            .show();
     }
 }
