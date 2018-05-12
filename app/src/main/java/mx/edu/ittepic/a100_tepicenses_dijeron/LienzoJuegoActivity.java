@@ -13,12 +13,15 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class LienzoJuegoActivity extends AppCompatActivity {
+    Bundle datos;
     @Override
     public void onCreate(Bundle instanceState){
         super.onCreate(instanceState);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        setContentView(new LienzoJuego(this, size.x, size.y));
+        datos = getIntent().getExtras();
+        setContentView(new LienzoJuego(this, size.x, size.y,datos.getString("id"),datos.getString("usuario")));
+
     }
 }

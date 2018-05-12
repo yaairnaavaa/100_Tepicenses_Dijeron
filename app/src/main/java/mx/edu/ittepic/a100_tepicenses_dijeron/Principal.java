@@ -47,6 +47,7 @@ public class Principal extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent iniciar = new Intent(Principal.this, LienzoJuegoActivity.class);
+                iniciar.putExtra("usuario", datos.getString("usuario"));
                 startActivity(iniciar);
             }
         });

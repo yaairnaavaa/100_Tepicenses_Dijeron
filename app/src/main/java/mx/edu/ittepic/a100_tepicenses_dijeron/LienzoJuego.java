@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -16,12 +17,21 @@ import android.widget.Toast;
 
 public class LienzoJuego extends View {
     int anchoP, altoP;
+    String idusuario,nusuario;
     Botones botones[], puntero;
+    CountDownTimer timer;
+    Boolean turno;
+    int seg;
 
-    public LienzoJuego(final Context context, final int anchopantalla, final int altopantalla) {
+    public LienzoJuego(final Context context, final int anchopantalla, final int altopantalla, String id, String usuario) {
         super(context);
         anchoP = anchopantalla;
         altoP = altopantalla;
+        idusuario = id;
+        nusuario = usuario;
+        seg = 20;
+        turno = false;
+
         setBackgroundResource(R.drawable.fondo);
 
         int nombreArchivos [] = {R.drawable.botona,R.drawable.botonb,R.drawable.botonc,R.drawable.botond,R.drawable.botonturno};
@@ -33,6 +43,22 @@ public class LienzoJuego extends View {
             botones[i] = new Botones(BitmapFactory.decodeResource(getResources(),nombreArchivos[i]),coorx[i],coory[i]);
         }
         puntero = null;
+
+        timer = new CountDownTimer(21000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                seg--;
+                invalidate();
+            }
+            @Override
+            public void onFinish() {
+                seg = 20;
+                turno = false;
+                invalidate();
+
+            }
+        };
+
     }
 
     protected void onDraw(Canvas c) {
@@ -41,9 +67,9 @@ public class LienzoJuego extends View {
         p.setColor(Color.WHITE);
         p.setTextSize(30);
         c.drawText("Usuario:",10,50,p);
-        c.drawText("Usuario1",130,50,p);
+        c.drawText(nusuario,130,50,p);
         c.drawText("Tiempo:",anchoP-200,50,p);
-        c.drawText("20",anchoP-80,50,p);
+        c.drawText(""+seg,anchoP-80,50,p);
 
         p.setFakeBoldText(true);
         c.drawText("Turno: "+"NombreJugador",270,130,p);
@@ -106,18 +132,29 @@ public class LienzoJuego extends View {
                         puntero = botones[i];
                         if(puntero == botones[0]){
                             Toast.makeText(getContext(),"Opcion A",Toast.LENGTH_SHORT).show();
+                            timer.cancel();
+                            timer.onFinish();
                         }
                         if(puntero == botones[1]){
                             Toast.makeText(getContext(),"Opcion B",Toast.LENGTH_SHORT).show();
+                            timer.cancel();
+                            timer.onFinish();
                         }
                         if(puntero == botones[2]){
                             Toast.makeText(getContext(),"Opcion C",Toast.LENGTH_SHORT).show();
+                            timer.cancel();
+                            timer.onFinish();
                         }
                         if(puntero == botones[3]){
                             Toast.makeText(getContext(),"Opcion D",Toast.LENGTH_SHORT).show();
+                            timer.cancel();
+                            timer.onFinish();
                         }
                         if(puntero == botones[4]){
-                            Toast.makeText(getContext(),"Opcion Turno",Toast.LENGTH_SHORT).show();
+                            if(!turno){
+                                turno = true;
+                                timer.start();
+                            }
                         }
                         break;
                     }
