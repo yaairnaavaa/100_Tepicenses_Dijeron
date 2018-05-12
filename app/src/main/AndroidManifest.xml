@@ -10,7 +10,8 @@
         android:supportsRtl="true">
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppThemeLogin">
+            android:theme="@style/AppThemeLogin"
+            android:screenOrientation="reversePortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,19 +20,22 @@
         </activity>
         <activity
             android:name=".Principal"
-            android:theme="@style/AppThemePrincipal" />
+            android:theme="@style/AppThemePrincipal"
+            android:screenOrientation="reversePortrait" />
         <activity
             android:name=".Creditos"
-            android:theme="@style/AppThemeDialog" />
+            android:theme="@style/AppThemeDialog"
+            android:screenOrientation="reversePortrait" />
         <activity
             android:name=".Ranking"
-            android:theme="@style/AppThemeRanking" />
+            android:theme="@style/AppThemeRanking"
+            android:screenOrientation="reversePortrait" />
         <activity android:name=".Registro"
             android:theme="@style/AppThemePrincipal"
-            />
+            android:screenOrientation="reversePortrait" />
         <activity android:name=".LienzoJuegoActivity"
             android:theme="@style/AppThemePrincipal"
-            android:screenOrientation="reversePortrait"/>
+            android:screenOrientation="reversePortrait" />
     </application>
 
 </manifest>

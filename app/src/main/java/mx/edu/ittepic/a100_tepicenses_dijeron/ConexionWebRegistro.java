@@ -22,6 +22,7 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
     Registro punteroR;
     MainActivity punteroM;
     Principal punteroP;
+    Ranking punteroRan;
 
     public ConexionWebRegistro(Registro p){
         punteroR = p;
@@ -33,6 +34,10 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
     }
     public ConexionWebRegistro(Principal p){
         punteroP = p;
+        variables = new ArrayList<String[]>();
+    }
+    public ConexionWebRegistro(Ranking p){
+        punteroRan = p;
         variables = new ArrayList<String[]>();
     }
 
@@ -60,7 +65,9 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
         HttpURLConnection conexion = null;
 
         try{
-            publishProgress("Intentando conectar");
+            if (punteroRan == null) {
+                publishProgress("Intentando conectar");
+            }
             conexion = (HttpURLConnection)urls[0].openConnection();
             conexion.setDoInput(true);
             conexion.setFixedLengthStreamingMode(POST.length());//Método para indicar la cantidad de bytes que se van a envia
@@ -119,6 +126,9 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
         }
         if (punteroP != null) {
             punteroP.procesarRespuesta(respuesta);
+        }
+        if (punteroRan != null) {
+            punteroRan.procesarRespuesta(respuesta);
         }
     }
 }

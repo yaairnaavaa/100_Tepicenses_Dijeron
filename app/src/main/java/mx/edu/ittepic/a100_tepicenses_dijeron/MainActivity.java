@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void procesarRespuesta(String respuesta) {
-        AlertDialog.Builder alert =  new AlertDialog.Builder(this);
         dialogo.dismiss();
         final String[] datos = respuesta.split(",");
         if (respuesta.equals("ERROR_0")){

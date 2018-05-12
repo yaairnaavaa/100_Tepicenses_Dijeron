@@ -81,21 +81,17 @@ public class Registro extends AppCompatActivity {
         if (respuesta.equals("ERROR_2")){
             respuesta = "Usuario no registrado";
         }
+        if (respuesta.equals("ERROR_3")){
+            respuesta = "El usuario ya existe";
+        }
         if (respuesta.equals("OK")){
             respuesta = "Registro exitoso";
             ok = true;
         }
-        alert.setTitle(respuesta);
-        alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                if (ok){
-                    Registro.this.finish();
-                }
-            }
-        }).setCancelable(false)
-        .show();
+        Toast.makeText(this, respuesta, Toast.LENGTH_LONG).show();
+        if (ok){
+            Registro.this.finish();
+        }
     }
 
     public void cambiarMensaje(String s) {
