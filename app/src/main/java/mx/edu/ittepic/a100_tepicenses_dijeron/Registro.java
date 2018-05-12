@@ -3,6 +3,7 @@ package mx.edu.ittepic.a100_tepicenses_dijeron;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.RegionIterator;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,13 +22,14 @@ public class Registro extends AppCompatActivity {
     ProgressDialog dialogo;
     EditText usuario,contraseña,confcontraseña;
     ConexionWebRegistro cw;
+    boolean ok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
         setTitle("Registro Usuario");
-
+        ok = false;
         registrar = findViewById(R.id.registrar);
         usuario = findViewById(R.id.usuario);
         contraseña = findViewById(R.id.contraseña);
@@ -35,7 +37,7 @@ public class Registro extends AppCompatActivity {
         registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!contraseña.getText().equals(confcontraseña.getText())){
+                if (!contraseña.getText().toString().equals(confcontraseña.getText().toString())){
                     procesarRespuesta("Las contraseñas no coinciden");
                     return;
                 }
@@ -50,7 +52,6 @@ public class Registro extends AppCompatActivity {
                 }catch(MalformedURLException e){
                     Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG).show();
                 }
-                finish();
             }
         });
 
@@ -67,14 +68,31 @@ public class Registro extends AppCompatActivity {
 
     public void procesarRespuesta(String respuesta) {
         AlertDialog.Builder alert =  new AlertDialog.Builder(this);
+
         if (dialogo != null) {
             dialogo.dismiss();
         }
-        alert.setTitle("Atención").setMessage(respuesta);
+        if (respuesta.equals("ERROR_0")){
+            respuesta = "Error de conexión";
+        }
+        if (respuesta.equals("ERROR_1")){
+            respuesta = "Error de conexión";
+        }
+        if (respuesta.equals("ERROR_2")){
+            respuesta = "Usuario no registrado";
+        }
+        if (respuesta.equals("OK")){
+            respuesta = "Registro exitoso";
+            ok = true;
+        }
+        alert.setTitle(respuesta);
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                if (ok){
+                    Registro.this.finish();
+                }
             }
         }).setCancelable(false)
         .show();

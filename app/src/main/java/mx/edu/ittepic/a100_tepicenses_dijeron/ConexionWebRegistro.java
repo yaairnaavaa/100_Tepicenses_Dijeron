@@ -19,10 +19,20 @@ import java.util.List;
 public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
 
     List<String[]> variables;
-    Registro puntero;
+    Registro punteroR;
+    MainActivity punteroM;
+    Principal punteroP;
 
     public ConexionWebRegistro(Registro p){
-        puntero = p;
+        punteroR = p;
+        variables = new ArrayList<String[]>();
+    }
+    public ConexionWebRegistro(MainActivity p){
+        punteroM = p;
+        variables = new ArrayList<String[]>();
+    }
+    public ConexionWebRegistro(Principal p){
+        punteroP = p;
         variables = new ArrayList<String[]>();
     }
 
@@ -69,7 +79,7 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
                 do{
                     linea = flujoEntrada.readLine();
                     if (linea!=null){
-                        respuesta += linea+"\n";
+                        respuesta += linea;
                     }
                 }while(linea != null);
                 flujoEntrada.close();
@@ -88,11 +98,28 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
     }
 
     protected void onProgressUpdate(String... r){
-        puntero.cambiarMensaje(r[0]);
+        if (punteroR != null) {
+            punteroR.cambiarMensaje(r[0]);
+        }
+        if (punteroM != null) {
+            punteroM.cambiarMensaje(r[0]);
+        }
+        if (punteroP != null) {
+            punteroP.cambiarMensaje(r[0]);
+        }
+
     }
 
     protected void onPostExecute(String respuesta){
-        puntero.procesarRespuesta(respuesta);
+        if (punteroR != null) {
+            punteroR.procesarRespuesta(respuesta);
+        }
+        if (punteroM != null) {
+            punteroM.procesarRespuesta(respuesta);
+        }
+        if (punteroP != null) {
+            punteroP.procesarRespuesta(respuesta);
+        }
     }
 }
 
