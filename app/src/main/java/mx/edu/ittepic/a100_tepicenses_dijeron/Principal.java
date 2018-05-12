@@ -63,7 +63,6 @@ public class Principal extends AppCompatActivity {
         botonranking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
                 Intent ranking = new Intent(Principal.this, Ranking.class);
                 startActivity(ranking);
             }

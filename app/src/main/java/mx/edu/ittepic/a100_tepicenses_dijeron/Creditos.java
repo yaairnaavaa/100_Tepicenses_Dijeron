@@ -19,8 +19,8 @@ public class Creditos extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                Intent entrar = new Intent(Creditos.this, Principal.class);
-                startActivity(entrar);
+                //Intent entrar = new Intent(Creditos.this, Principal.class);
+                //startActivity(entrar);
 
             }
         });
