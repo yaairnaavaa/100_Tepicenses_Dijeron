@@ -9,25 +9,19 @@
     android:padding="25dp"
     tools:context="mx.edu.ittepic.a100_tepicenses_dijeron.Ranking">
 
-    <ScrollView
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/back"
-                android:layout_marginTop="50dp"
-                android:layout_gravity="right|bottom"
-                android:id="@+id/atras"
-                android:layout_margin="25dp"
-                />
-        </LinearLayout>
-
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:id="@+id/rankingList"/>
+    <ImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/back"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="right|bottom"
+        android:id="@+id/atras"
+        android:layout_margin="25dp"
+        />
 </LinearLayout>
 

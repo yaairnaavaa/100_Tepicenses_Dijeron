@@ -19,7 +19,7 @@
         />
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="400dp"
         android:gravity="center"
         android:background="@drawable/logo"
         />
@@ -65,8 +65,8 @@
                 android:textColor="#000000"
                 />
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:background="@drawable/back"
                 android:layout_marginTop="30dp"
                 android:layout_gravity="right|bottom"

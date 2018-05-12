@@ -3,10 +3,6 @@ package mx.edu.ittepic.a100_tepicenses_dijeron;
 /**
  * Created by yairnava on 11/05/18.
  */
-
-/**
- * Created by yairnava on 11/05/18.
- */
 import android.os.AsyncTask;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -54,7 +50,7 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
         HttpURLConnection conexion = null;
 
         try{
-            //publishProgress("Intentando conectar");
+            publishProgress("Intentando conectar");
             conexion = (HttpURLConnection)urls[0].openConnection();
             conexion.setDoInput(true);
             conexion.setFixedLengthStreamingMode(POST.length());//Método para indicar la cantidad de bytes que se van a envia
@@ -91,12 +87,12 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
         return respuesta;
     }
 
-    //protected void onProgressUpdate(String... r){
-       // puntero.cambiarMensaje(r[0]);
-    //}
+    protected void onProgressUpdate(String... r){
+        puntero.cambiarMensaje(r[0]);
+    }
 
-    //protected void onPostExecute(String respuesta){
-      //  puntero.procesarRespuesta(respuesta);
-    //}
+    protected void onPostExecute(String respuesta){
+        puntero.procesarRespuesta(respuesta);
+    }
 }
 

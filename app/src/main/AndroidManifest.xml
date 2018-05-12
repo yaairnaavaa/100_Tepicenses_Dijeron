@@ -27,8 +27,11 @@
             android:name=".Ranking"
             android:theme="@style/AppThemeRanking" />
         <activity android:name=".Registro"
-            android:theme="@style/AppThemeDialog"
+            android:theme="@style/AppThemePrincipal"
             />
+        <activity android:name=".LienzoJuegoActivity"
+            android:theme="@style/AppThemePrincipal"
+            android:screenOrientation="reversePortrait"/>
     </application>
 
 </manifest>

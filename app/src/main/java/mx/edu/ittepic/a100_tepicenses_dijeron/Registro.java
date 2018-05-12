@@ -35,13 +35,17 @@ public class Registro extends AppCompatActivity {
         registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!contraseña.getText().equals(confcontraseña.getText())){
+                    procesarRespuesta("Las contraseñas no coinciden");
+                    return;
+                }
                 try {
                     cw = new ConexionWebRegistro(Registro.this);
                     cw.agregarVariable("usuario", usuario.getText().toString());
                     cw.agregarVariable("contrasena", contraseña.getText().toString());
 
                     URL direccion = new URL("https://tpdmagustin.000webhostapp.com/100TD/crearusuario.php");
-                    //dialogo = ProgressDialog.show(Registro.this, "Espere", "Insertando Registro...");
+                    dialogo = ProgressDialog.show(Registro.this, "Espere", "Insertando Registro...");
                     cw.execute(direccion);
                 }catch(MalformedURLException e){
                     Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG).show();
@@ -55,7 +59,7 @@ public class Registro extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
-                Intent entrar = new Intent(Registro.this, Principal.class);
+                Intent entrar = new Intent(Registro.this, MainActivity.class);
                 startActivity(entrar);
             }
         });
@@ -63,19 +67,20 @@ public class Registro extends AppCompatActivity {
 
     public void procesarRespuesta(String respuesta) {
         AlertDialog.Builder alert =  new AlertDialog.Builder(this);
-        //dialogo.dismiss();
-        alert.setTitle("Mensaje del servidor").setMessage(respuesta);
+        if (dialogo != null) {
+            dialogo.dismiss();
+        }
+        alert.setTitle("Atención").setMessage(respuesta);
         alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
-        }).show();
+        }).setCancelable(false)
+        .show();
     }
 
-    //public void cambiarMensaje(String s) {
-       // dialogo.setMessage(s);
-   // }
-
-
+    public void cambiarMensaje(String s) {
+       dialogo.setMessage(s);
+    }
 }

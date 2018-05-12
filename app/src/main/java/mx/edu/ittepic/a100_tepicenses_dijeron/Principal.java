@@ -12,6 +12,7 @@ import android.widget.Button;
 import static java.security.AccessController.getContext;
 
 public class Principal extends AppCompatActivity {
+    Button botoniniciar;
     Button botoncreditos;
     Button botonranking;
     Button botonsalir;
@@ -22,7 +23,15 @@ public class Principal extends AppCompatActivity {
         botoncreditos = findViewById(R.id.creditos);
         botonranking = findViewById(R.id.ranking);
         botonsalir = findViewById(R.id.cerrarsesion);
+        botoniniciar = findViewById(R.id.iniciar);
 
+        botoniniciar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent iniciar = new Intent(Principal.this, LienzoJuegoActivity.class);
+                startActivity(iniciar);
+            }
+        });
 
         botoncreditos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,5 +74,27 @@ public class Principal extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert
+            .setTitle("¿Desea cerrar la sesión?")
+            .setPositiveButton("SI", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Principal.super.onBackPressed();
+                }
+            })
+            .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            })
+            .setCancelable(false)
+            .show();
     }
 }
