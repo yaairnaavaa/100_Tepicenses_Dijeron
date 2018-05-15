@@ -23,7 +23,8 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
     MainActivity punteroM;
     Principal punteroP;
     Ranking punteroRan;
-    LienzoJuego punteroLie;
+    UsuariosDisponibles punteroUD;
+    LienzoJuego punteroLJ;
 
     public ConexionWebRegistro(Registro p){
         punteroR = p;
@@ -41,8 +42,12 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
         punteroRan = p;
         variables = new ArrayList<String[]>();
     }
+    public ConexionWebRegistro(UsuariosDisponibles p){
+        punteroUD = p;
+        variables = new ArrayList<String[]>();
+    }
     public ConexionWebRegistro(LienzoJuego p){
-        punteroLie = p;
+        punteroLJ = p;
         variables = new ArrayList<String[]>();
     }
 
@@ -70,7 +75,7 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
         HttpURLConnection conexion = null;
 
         try{
-            if (punteroRan == null) {
+            if (punteroRan == null && punteroUD == null) {
                 publishProgress("Intentando conectar");
             }
             conexion = (HttpURLConnection)urls[0].openConnection();
@@ -119,7 +124,9 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
         if (punteroP != null) {
             punteroP.cambiarMensaje(r[0]);
         }
-
+        if (punteroLJ != null) {
+            //punteroLJ.cambiarMensaje(r[0]);
+        }
     }
 
     protected void onPostExecute(String respuesta){
@@ -135,8 +142,11 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
         if (punteroRan != null) {
             punteroRan.procesarRespuesta(respuesta);
         }
-        if (punteroLie != null){
-            punteroLie.procesarRespuesta(respuesta);
+        if (punteroUD != null) {
+            punteroUD.procesarRespuesta(respuesta);
+        }
+        if (punteroLJ != null) {
+            punteroLJ.procesarRespuesta(respuesta);
         }
     }
 }
