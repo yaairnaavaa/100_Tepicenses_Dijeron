@@ -46,8 +46,8 @@ public class Principal extends AppCompatActivity {
         botoniniciar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent iniciar = new Intent(Principal.this, LienzoJuegoActivity.class);
-                iniciar.putExtra("usuario", datos.getString("usuario"));
+                Intent iniciar = new Intent(Principal.this, UsuariosDisponibles.class);
+                iniciar.putExtra("id", datos.getString("id"));
                 startActivity(iniciar);
             }
         });

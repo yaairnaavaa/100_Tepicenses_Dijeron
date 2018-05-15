@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     cw.agregarVariable("usuario", usuario.getText().toString());
                     cw.agregarVariable("contrasena", contraseña.getText().toString());
                     URL direccion = new URL("https://tpdmagustin.000webhostapp.com/100TD/login.php");
-                    dialogo = ProgressDialog.show(MainActivity.this, "Espere", "Verificando Registro...");
+                    dialogo = ProgressDialog.show(MainActivity.this, "Espere", "Intentando iniciar sesión...");
                     cw.execute(direccion);
                 }catch(MalformedURLException e){
                     Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG).show();
@@ -63,23 +63,35 @@ public class MainActivity extends AppCompatActivity {
     public void procesarRespuesta(String respuesta) {
         dialogo.dismiss();
         final String[] datos = respuesta.split(",");
-        if (respuesta.equals("ERROR_0")){
-            respuesta = "Error de conexión";
+        switch (respuesta) {
+            case "ERROR_404_0":
+                respuesta = "Error de conexión";
+                break;
+            case "ERROR_404_1":
+                respuesta = "Error de conexión";
+                break;
+            case "ERROR_404_2":
+                respuesta = "Error de conexión";
+                break;
+            case "ERROR_0":
+                respuesta = "Error de conexión";
+                break;
+            case "ERROR_1":
+                respuesta = "Error de conexión";
+                break;
+            case "ERROR_2":
+                respuesta = "Datos Incorrectos";
+                break;
+            default:
+                respuesta = "Bienvenido "+datos[1];
+                Intent entrar = new Intent(MainActivity.this, Principal.class);
+                entrar.putExtra("id",datos[0]+"");
+                entrar.putExtra("usuario", datos[1]+"");
+                entrar.putExtra("puntos", datos[2]+"");
+                startActivity(entrar);
+                MainActivity.this.finish();
+                break;
         }
-        if (respuesta.equals("ERROR_1")){
-            respuesta = "Error de conexión";
-        }
-        if (respuesta.equals("ERROR_2")){
-            respuesta = "Datos Incorrectos";
-        }else{
-            respuesta = "Bienvenido "+datos[1];
-        }
-        Intent entrar = new Intent(MainActivity.this, Principal.class);
-        entrar.putExtra("id",datos[0]+"");
-        entrar.putExtra("usuario", datos[1]+"");
-        entrar.putExtra("puntos", datos[2]+"");
-        startActivity(entrar);
-        MainActivity.this.finish();
         Toast.makeText(this, respuesta, Toast.LENGTH_LONG).show();
     }
 
