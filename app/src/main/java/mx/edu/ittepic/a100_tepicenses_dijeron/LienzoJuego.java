@@ -9,6 +9,10 @@ import android.os.CountDownTimer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -23,14 +27,33 @@ public class LienzoJuego extends View {
     Boolean turno;
     int seg;
 
+    //Agregar
+    ConexionWebRegistro cw;
+    List<Integer> numpregunta;
+    String[] opciones,respuestas;
+    String pregunta,o1,o2,o3,o4,p1,p2,p3,p4;
+    //Agregar
+
+
     public LienzoJuego(final Context context, final int anchopantalla, final int altopantalla, String id, String usuario) {
         super(context);
+        pregunta = "Pregunta";
+        o1 = "R1";
+        o2 = "R2";
+        o3 = "R3";
+        o4 = "R4";
+        p1 = "pts";
+        p2 = "pts";
+        p3 = "pts";
+        p4 = "pts";
         anchoP = anchopantalla;
         altoP = altopantalla;
         idusuario = id;
         nusuario = usuario;
         seg = 20;
         turno = false;
+        numpregunta = new ArrayList<>();
+
 
         setBackgroundResource(R.drawable.fondo);
 
@@ -55,9 +78,10 @@ public class LienzoJuego extends View {
                 seg = 20;
                 turno = false;
                 invalidate();
-
             }
         };
+
+        inicio();
 
     }
 
@@ -89,32 +113,32 @@ public class LienzoJuego extends View {
         p.setColor(Color.WHITE);
         p.setTextSize(25);
         p.setFakeBoldText(false);
-        c.drawText("Respuesta 1",170,260,p);
-        c.drawText("100",520,260,p);
+        c.drawText(o1,170,260,p);
+        c.drawText(p1,520,260,p);
 
-        c.drawText("Respuesta 2",170,310,p);
-        c.drawText("75",520,310,p);
+        c.drawText(o2,170,310,p);
+        c.drawText(p2,520,310,p);
 
-        c.drawText("Respuesta 3",170,360,p);
-        c.drawText("50",520,360,p);
+        c.drawText(o3,170,360,p);
+        c.drawText(p3,520,360,p);
 
-        c.drawText("Respuesta 4",170,410,p);
-        c.drawText("25",520,410,p);
+        c.drawText(o4,170,410,p);
+        c.drawText(p4,520,410,p);
 
         //Pregunta
         p.setColor(Color.WHITE);
         p.setTextSize(25);
         p.setFakeBoldText(true);
-        c.drawText("Pregunta a realizar",150,540,p);
+        c.drawText(pregunta,150,540,p);
 
         //Respuestas
         p.setColor(Color.WHITE);
         p.setTextSize(25);
         p.setFakeBoldText(true);
-        c.drawText("Respuesta A",100,645,p);
-        c.drawText("Respuesta B",480,645,p);
-        c.drawText("Respuesta C",100,735,p);
-        c.drawText("Respuesta D",480,735,p);
+        c.drawText(o1,100,645,p);
+        c.drawText(o2,480,645,p);
+        c.drawText(o3,100,735,p);
+        c.drawText(o4,480,735,p);
 
         //Botones
         for(int i=0 ; i<botones.length ; i++){
@@ -131,28 +155,25 @@ public class LienzoJuego extends View {
                     if(botones[i].estaEnArea(e.getX(),e.getY())){
                         puntero = botones[i];
                         if(puntero == botones[0]){
-                            Toast.makeText(getContext(),"Opcion A",Toast.LENGTH_SHORT).show();
                             timer.cancel();
                             timer.onFinish();
                         }
                         if(puntero == botones[1]){
-                            Toast.makeText(getContext(),"Opcion B",Toast.LENGTH_SHORT).show();
                             timer.cancel();
                             timer.onFinish();
                         }
                         if(puntero == botones[2]){
-                            Toast.makeText(getContext(),"Opcion C",Toast.LENGTH_SHORT).show();
                             timer.cancel();
                             timer.onFinish();
                         }
                         if(puntero == botones[3]){
-                            Toast.makeText(getContext(),"Opcion D",Toast.LENGTH_SHORT).show();
                             timer.cancel();
                             timer.onFinish();
                         }
                         if(puntero == botones[4]){
                             if(!turno){
                                 turno = true;
+                                inicio();
                                 timer.start();
                             }
                         }
@@ -163,4 +184,41 @@ public class LienzoJuego extends View {
         }
         return true;
     }
+
+    private void inicio(){
+        try {
+            cw = new ConexionWebRegistro(LienzoJuego.this);
+            URL direccion = new URL("https://tpdmagustin.000webhostapp.com/100TD/preguntas.php");
+            cw.execute(direccion);
+        }catch(MalformedURLException e){
+            Toast.makeText(getContext(), "ERROR", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void procesarRespuesta(String respuesta) {
+        List<String[]> datos = new ArrayList<String[]>();
+        int num = Integer.parseInt(respuesta.split("&")[1]);
+        if (numpregunta.contains(num)){
+            inicio();
+            return;
+        }
+        numpregunta.add(num);
+        String[] partes = respuesta.split("&")[0].split("#");
+        for (int i = 0; i < partes.length; i++){
+            datos.add(partes[i].split(":"));
+        }
+
+        pregunta = datos.get(0)[0];//pregunta a mostrar
+        o1 = datos.get(1)[0];
+        p1 = datos.get(1)[1];
+        o2 = datos.get(2)[0];
+        p2 = datos.get(2)[1];
+        o3 = datos.get(3)[0];
+        p3 = datos.get(3)[1];
+        o4 = datos.get(4)[0];
+        p4 = datos.get(4)[1];
+        invalidate();
+
+    }
+
 }

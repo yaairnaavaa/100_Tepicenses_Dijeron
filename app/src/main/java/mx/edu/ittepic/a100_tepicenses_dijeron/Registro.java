@@ -37,6 +37,10 @@ public class Registro extends AppCompatActivity {
         registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (usuario.getText().toString().isEmpty() || contraseña.getText().toString().isEmpty() || confcontraseña.getText().toString().isEmpty()){
+                    Toast.makeText(Registro.this, "Campos vacios", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 if (!contraseña.getText().toString().equals(confcontraseña.getText().toString())){
                     procesarRespuesta("Las contraseñas no coinciden");
                     return;

@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (usuario.getText().toString().isEmpty() || contraseña.getText().toString().isEmpty()){
-                    Toast.makeText(MainActivity.this, "Campos vacio", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Campos vacios", Toast.LENGTH_LONG).show();
                     return;
                 }
                 try {
