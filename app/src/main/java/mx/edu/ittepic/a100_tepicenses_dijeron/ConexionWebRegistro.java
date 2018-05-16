@@ -90,6 +90,7 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
             flujoSalida.close();
 
             if (conexion.getResponseCode() == 200) {
+                System.out.print("Código de respuesta: "+conexion.getResponseCode());
                 InputStreamReader input = new InputStreamReader(conexion.getInputStream(), "UTF-8");
                 BufferedReader flujoEntrada = new BufferedReader(input);
                 String linea = "";
@@ -130,6 +131,7 @@ public class ConexionWebRegistro extends AsyncTask<URL, String, String>{
     }
 
     protected void onPostExecute(String respuesta){
+        System.out.println(respuesta);
         if (punteroR != null) {
             punteroR.procesarRespuesta(respuesta);
         }
