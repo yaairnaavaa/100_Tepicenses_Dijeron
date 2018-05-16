@@ -49,13 +49,17 @@ public class UsuariosDisponibles extends AppCompatActivity {
                 break;
             case "ERROR_2":
                 respuesta = "No hay usuarios disponibles";
-                break;
+                this.finish();
+                Toast.makeText(this, respuesta, Toast.LENGTH_LONG).show();
+                return;
             default:
                 final String[] datos = respuesta.split("#");
-                respuesta = "Lista usuarios";
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, datos);
+                String[] usuarios = new String[datos.length];
+                for(int i=0; i<datos.length; i++){
+                    usuarios[i] = datos[i].split(",")[1];
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, usuarios);
                 listUsuariosDisp.setAdapter(adapter);
-                Toast.makeText(this, respuesta, Toast.LENGTH_LONG).show();
                 break;
         }
     }
