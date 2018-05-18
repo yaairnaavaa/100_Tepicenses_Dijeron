@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -27,17 +29,14 @@ public class LienzoJuego extends View {
     Boolean turno,rra,rrb,rrc,rrd;
     int seg;
     List<String[]> datos = new ArrayList<String[]>();
-
-
-    //Agregar
-    ConexionWebRegistro cw,cwRespuestas;
+    ConexionWebRegistro cw,cwRespuestas, conexionweb;
     List<Integer> numpregunta;
     String pregunta,preguntar2,o1,o2,o3,o4,p1,p2,p3,p4;
-    //Agregar
-
+    Handler handler;
 
     public LienzoJuego(final Context context, final int anchopantalla, final int altopantalla, String id, String usuario) {
         super(context);
+        handler = new Handler();
         puntospartida = 0;
         pregunta = "Pregunta R1";
         preguntar2 = "Pregunta R2";
@@ -45,10 +44,10 @@ public class LienzoJuego extends View {
         o2 = "R2";
         o3 = "R3";
         o4 = "R4";
-        p1 = "pts";
-        p2 = "pts";
-        p3 = "pts";
-        p4 = "pts";
+        p1 = "pts1";
+        p2 = "pts2";
+        p3 = "pts3";
+        p4 = "pts4";
         anchoP = anchopantalla;
         altoP = altopantalla;
         idusuario = id;
@@ -57,20 +56,15 @@ public class LienzoJuego extends View {
         turno = false;
         numpregunta = new ArrayList<>();
         rra = rrb = rrc = rrd = false;
-
-
         setBackgroundResource(R.drawable.fondo);
-
         int nombreArchivos [] = {R.drawable.botona,R.drawable.botonb,R.drawable.botonc,R.drawable.botond,R.drawable.botonturno};
         int coorx [] = {50,250,450,650,300};
         int coory [] = {820,820,820,820,1000};
         botones = new Botones[5];
-
         for(int i=0 ; i< botones.length ; i++){
             botones[i] = new Botones(BitmapFactory.decodeResource(getResources(),nombreArchivos[i]),coorx[i],coory[i]);
         }
         puntero = null;
-
         timer = new CountDownTimer(21000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -80,13 +74,24 @@ public class LienzoJuego extends View {
             @Override
             public void onFinish() {
                 seg = 20;
-                turno = false;
+                //turno = false;
+                enviarRespuesta(idusuario,"0","0");
                 invalidate();
             }
         };
-
-        inicio();
-
+        inicio(-1);
+        new Runnable(){
+            @Override
+            public void run(){
+                try{
+                    conexionweb = new ConexionWebRegistro(LienzoJuego.this);
+                    conexionweb.agregarVariable("id", idusuario);
+                    URL direccion = new URL("https://tpdmagustin.000webhostapp.com/100TD/consultarespuesta.php");
+                    conexionweb.execute(direccion);
+                }catch (MalformedURLException error){}
+                handler.postDelayed(this, 1000);
+            }
+        }.run();
     }
 
     protected void onDraw(Canvas c) {
@@ -169,7 +174,6 @@ public class LienzoJuego extends View {
     }
 
     public boolean onTouchEvent(MotionEvent e){
-        e.getAction();
         switch (e.getAction()){
             case MotionEvent.ACTION_DOWN:
                 for(int i=0 ; i<botones.length ; i++) {
@@ -177,45 +181,41 @@ public class LienzoJuego extends View {
                         puntero = botones[i];
                         //Boton A
                         if(puntero == botones[0]){
-                            if(rra == false){
+                            if(!rra){
                                 puntospartida += Integer.parseInt(datos.get(4)[1].trim());
                                 timer.cancel();
                                 timer.onFinish();
                                 enviarRespuesta(idusuario,"4",datos.get(4)[1]);
                             }
                             rra = true;
-
                         }
                         //Boton B
                         if(puntero == botones[1]){
-                            if(rrb == false){
+                            if(!rrb){
                                 puntospartida += Integer.parseInt(datos.get(1)[1].trim());
                                 timer.cancel();
                                 timer.onFinish();
                                 enviarRespuesta(idusuario,"1",datos.get(1)[1]);
-
                             }
                             rrb = true;
                         }
                         //Boton C
                         if(puntero == botones[2]){
-                            if(rrc == false){
+                            if(!rrc){
                                 puntospartida += Integer.parseInt(datos.get(2)[1].trim());
                                 timer.cancel();
                                 timer.onFinish();
                                 enviarRespuesta(idusuario,"2",datos.get(2)[1]);
-
                             }
                             rrc = true;
                         }
                         //Boton D
                         if(puntero == botones[3]){
-                            if(rrd == false){
+                            if(!rrd){
                                 puntospartida += Integer.parseInt(datos.get(3)[1].trim());
                                 timer.cancel();
                                 timer.onFinish();
                                 enviarRespuesta(idusuario,"3",datos.get(3)[1]);
-
                             }
                             rrd = true;
                         }
@@ -223,12 +223,11 @@ public class LienzoJuego extends View {
                             if(!turno){
                                 turno = true;
                                 rra = rrb = rrc = rrd = false;
-                                enviarRespuesta(idusuario,"0","0");
-                                inicio();
+                                enviarRespuesta(idusuario,"5","0");
+                                //inicio();
                                 timer.start();
                             }
                         }
-                        break;
                     }
                 }
                 break;
@@ -236,9 +235,11 @@ public class LienzoJuego extends View {
         return true;
     }
 
-    private void inicio(){
+    private void inicio(int _pregunta){
         try {
             cw = new ConexionWebRegistro(LienzoJuego.this);
+            cw.agregarVariable("id", idusuario);
+            cw.agregarVariable("pregunta", _pregunta+"");
             URL direccion = new URL("https://tpdmagustin.000webhostapp.com/100TD/preguntas.php");
             cw.execute(direccion);
         }catch(MalformedURLException e){
@@ -259,7 +260,7 @@ public class LienzoJuego extends View {
         }
     }
     public void actualizarVariables(String[] pdiv){
-
+        System.out.println("tamaño: "+pdiv.length+" pregunta: "+pdiv[0]);
         pregunta = pdiv[0];//pregunta a mostrar R1
         preguntar2 = pdiv[1];//pregunta a mostrar R2
 
@@ -278,10 +279,19 @@ public class LienzoJuego extends View {
             Toast.makeText(getContext(), respuesta, Toast.LENGTH_SHORT).show();
             return;
         }
+        if (respuesta.equals("TRUE")){
+            enviarRespuesta(idusuario, "5", "0");
+            inicio(numpregunta.get(numpregunta.size()-1));
+            return;
+        }
+        if (respuesta.equals("FALSE")){
+            System.out.println("FALSE");
+            return;
+        }
         int num = Integer.parseInt(respuesta.split("¬")[1]);
         limpiarVariables();
         if (numpregunta.contains(num)){
-            inicio();
+            inicio(num);
             return;
         }
         numpregunta.add(num);
