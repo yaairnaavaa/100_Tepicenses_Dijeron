@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -24,25 +25,30 @@ import java.util.Random;
  */
 
 public class LienzoJuego extends View {
+    MediaPlayer mp;
+
     int anchoP, altoP, puntospartida;
     String idusuario,nusuario, nomTurno;
     Botones botones[], puntero;
     CountDownTimer timer;
-    Boolean turno,rra,rrb,rrc,rrd;
+    Boolean turno,rra,rrb,rrc,rrd, isFinalizado;
     int seg;
     List<String[]> datos = new ArrayList<String[]>();
     ConexionWebRegistro cw,cwRespuestas, conexionweb, conexionFin;
     List<Integer> numpregunta;
     String pregunta,preguntar2,o1,o2,o3,o4,p1,p2,p3,p4;
     Handler handler;
+    Runnable runnable;
     private int numRonda, nPregunta;
 
     public LienzoJuego(final Context context, final int anchopantalla, final int altopantalla, String id, String usuario) {
         super(context);
+        mp = MediaPlayer.create(getContext(),R.raw.correcto);
         handler = new Handler();
         puntospartida = 0;
         nomTurno = "";
-        numRonda = nPregunta = 1;
+        numRonda = 1;
+        nPregunta = 0;
         pregunta = "Pregunta R1";
         preguntar2 = "Pregunta R2";
         o1 = "R1";
@@ -58,7 +64,7 @@ public class LienzoJuego extends View {
         idusuario = id;
         nusuario = usuario;
         seg = 20;
-        turno = false;
+        turno = isFinalizado =false;
         numpregunta = new ArrayList<>();
         rra = rrb = rrc = rrd = false;
         setBackgroundResource(R.drawable.fondo);
@@ -85,7 +91,7 @@ public class LienzoJuego extends View {
             }
         };
         inicio(-1);
-        new Runnable(){
+        runnable = new Runnable(){
             @Override
             public void run(){
                 try{
@@ -96,7 +102,8 @@ public class LienzoJuego extends View {
                 }catch (MalformedURLException error){}
                 handler.postDelayed(this, 1000);
             }
-        }.run();
+        };
+        runnable.run();
     }
 
     protected void onDraw(Canvas c) {
@@ -112,7 +119,9 @@ public class LienzoJuego extends View {
         c.drawText(""+seg,anchoP-80,50,p);
 
         p.setFakeBoldText(true);
-        c.drawText("Turno: "+nomTurno,270,130,p);
+        c.drawText("Turno: "+nomTurno,270,130, p);
+        c.drawText("Ronda: "+numRonda, 10,90, p);
+        c.drawText("Pregunta: "+nPregunta, 10, 120, p);
         p.setFakeBoldText(false);
 
         c.drawBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.puntuacionrespuestas),0,150,p);
@@ -173,49 +182,53 @@ public class LienzoJuego extends View {
                         if(puntero == botones[0]){
                             if(!rra && nomTurno.equals(nusuario)){
                                 puntospartida += Integer.parseInt(datos.get(4)[1].trim());
-                                timer.cancel();
-                                timer.onFinish();
+                                //timer.cancel();
+                                //timer.onFinish();
                                 enviarRespuesta(idusuario,"4",datos.get(4)[1]);
                                 rra = true;
+                                mp.start();
                             }
                         }
                         //Boton B
                         if(puntero == botones[1]){
                             if(!rrb && nomTurno.equals(nusuario)){
                                 puntospartida += Integer.parseInt(datos.get(1)[1].trim());
-                                timer.cancel();
-                                timer.onFinish();
+                                //timer.cancel();
+                                //timer.onFinish();
                                 enviarRespuesta(idusuario,"1",datos.get(1)[1]);
                                 rrb = true;
+                                mp.start();
                             }
                         }
                         //Boton C
                         if(puntero == botones[2]){
                             if(!rrc && nomTurno.equals(nusuario)){
                                 puntospartida += Integer.parseInt(datos.get(2)[1].trim());
-                                timer.cancel();
-                                timer.onFinish();
+                                //timer.cancel();
+                                //timer.onFinish();
                                 enviarRespuesta(idusuario,"2",datos.get(2)[1]);
                                 rrc = true;
+                                mp.start();
                             }
                         }
                         //Boton D
                         if(puntero == botones[3]){
                             if(!rrd && nomTurno.equals(nusuario)){
                                 puntospartida += Integer.parseInt(datos.get(3)[1].trim());
-                                timer.cancel();
-                                timer.onFinish();
+                                //timer.cancel();
+                                //timer.onFinish();
                                 enviarRespuesta(idusuario,"3",datos.get(3)[1]);
                                 rrd = true;
+                                mp.start();
                             }
                         }
                         if(puntero == botones[4]){
                             if(!turno){
-                                turno = true;
                                 //rra = rrb = rrc = rrd = false;
                                 enviarRespuesta(idusuario,"5","0");
+                                turno = true;
                                 //inicio();
-                                timer.start();
+                                //timer.start();
                             }
                         }
                     }
@@ -275,6 +288,7 @@ public class LienzoJuego extends View {
             return;
         }
         if (respuesta.equals("NO_ACTIVA")){
+            this.onFinishInflate();
             ((LienzoJuegoActivity)getContext()).finish();
         }
         if (respuesta.contains(",") && !respuesta.contains("#")){
@@ -300,45 +314,56 @@ public class LienzoJuego extends View {
             return;
         }
         if (respuesta.equals("FIN")){
-            ((LienzoJuegoActivity)getContext()).finish();
+            if (!isFinalizado){
+                handler.removeCallbacks(runnable);
+                ((LienzoJuegoActivity)getContext()).finish();
+                this.onFinishInflate();
+            }
         }
-        if (numRonda <= 3){
-            if (nPregunta <= 3){
-                int num = Integer.parseInt(respuesta.split("¬")[1]);
-                limpiarVariables();
-                if (numpregunta.contains(num)){
-                    inicio(num);
+        if (respuesta.contains("¬")) {
+            if (numRonda <= 1) {//5 Rondas
+                if (nPregunta <= 2) {//3 Preguntas
+                    int num = Integer.parseInt(respuesta.split("¬")[1]);
+                    limpiarVariables();
+                    if (numpregunta.contains(num)) {
+                        inicio(num);
+                        return;
+                    }
+                    numpregunta.add(num);
+                    String[] partes = respuesta.split("¬")[0].split("#");
+                    for (int i = 0; i < partes.length; i++) {
+                        datos.add(partes[i].split(":"));
+                    }
+                    String[] pdiv = datos.get(0)[0].split(",");
+                    actualizarVariables(pdiv);
+                    enviarRespuesta(idusuario, "6", "0");
+                    invalidate();
+                    nPregunta++;
+                    turno = false;
+                    if (nPregunta > 2) {
+                        nPregunta = 1;
+                        if(numRonda < 2){
+                            numRonda++;
+                        }
+                    }
                     return;
                 }
-                numpregunta.add(num);
-                String[] partes = respuesta.split("¬")[0].split("#");
-                for (int i = 0; i < partes.length; i++){
-                    datos.add(partes[i].split(":"));
-                }
-                String[] pdiv = datos.get(0)[0].split(",");
-                actualizarVariables(pdiv);
-                invalidate();
-                enviarRespuesta(idusuario, "5", "0");
-                nPregunta++;
-                turno = false;
-                if (nPregunta>3){
-                    nPregunta=1;
-                }
-                return;
             }
-            numRonda++;
-            return;
+            if (!isFinalizado){
+                AlertDialog.Builder finJuego = new AlertDialog.Builder(getContext());
+                finJuego.setTitle("Fin del juego")
+                        .setMessage("El juego ha terminado...")
+                        .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                finalizarPartida(idusuario);
+                                isFinalizado = false;
+                            }
+                        }).show();
+                isFinalizado = true;
+            }
         }
-        AlertDialog.Builder finJuego = new AlertDialog.Builder(getContext());
-        finJuego.setTitle("Fin del juego")
-                .setMessage("El juego ha terminado...")
-                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        finalizarPartida(idusuario);
-                    }
-                }).show();
     }
     private void finalizarPartida(String id){
         try{
@@ -362,5 +387,4 @@ public class LienzoJuego extends View {
         o4 = "";
         p4 = "";
     }
-
 }

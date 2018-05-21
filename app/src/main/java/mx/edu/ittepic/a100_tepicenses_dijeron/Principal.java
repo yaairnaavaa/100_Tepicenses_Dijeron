@@ -31,6 +31,7 @@ public class Principal extends AppCompatActivity {
     boolean ok, isShow;
     Bundle datos;
     Handler handler;
+    Runnable runnable;
     boolean dismiss;
 
     @Override
@@ -94,7 +95,7 @@ public class Principal extends AppCompatActivity {
             }
         });
 
-        new Runnable(){
+        runnable = new Runnable(){
             @Override
             public void run(){
                 try{
@@ -103,9 +104,10 @@ public class Principal extends AppCompatActivity {
                     URL direccion = new URL("https://tpdmagustin.000webhostapp.com/100TD/consultasolicitudpendiente.php");
                     conexionWeb.execute(direccion);
                 }catch (MalformedURLException err){}
-                handler.postDelayed(this, 10000);
+                handler.postDelayed(this, 5000);
             }
-        }.run();
+        };
+        runnable.run();
     }
 
     private void cerrarSesion(){
@@ -121,6 +123,7 @@ public class Principal extends AppCompatActivity {
             .setPositiveButton("Si", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    handler.removeCallbacks(runnable);
                     logout();
                 }
             })
@@ -167,6 +170,7 @@ public class Principal extends AppCompatActivity {
         if (respuesta.contains("stat:")){
             if (respuesta.split(":").length == 1){
                 //respuesta = "";
+                System.out.println("============= vacio =============");
                 return;
             }
             if(respuesta.split(":")[1].equals("1")){
@@ -228,5 +232,23 @@ public class Principal extends AppCompatActivity {
             URL direccion = new URL("https://tpdmagustin.000webhostapp.com/100TD/respuestasolicitud.php");
             cw.execute(direccion);
         }catch (MalformedURLException err){}
+    }
+    protected void onStop(){
+        handler.removeCallbacks(runnable);
+        super.onStop();
+    }
+    protected void onPause(){
+        handler.removeCallbacks(runnable);
+        super.onPause();
+    }
+    protected void onResume(){
+        runnable.run();
+        isShow = false;
+        dismiss = false;
+        super.onResume();
+    }
+    protected void onDestroy(){
+        handler.removeCallbacks(runnable);
+        super.onDestroy();
     }
 }

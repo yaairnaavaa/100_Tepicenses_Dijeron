@@ -3,6 +3,7 @@ package mx.edu.ittepic.a100_tepicenses_dijeron;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     ConexionWebRegistro cw;
     ProgressDialog dialogo;
 
+    MediaPlayer mp;//Variable para reproducr cancion
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
         registro = findViewById(R.id.registro);
         usuario = findViewById(R.id.usuario);
         contraseña = findViewById(R.id.contraseña);
+
+        //Reproducir Cancion Intro
+        if (mp == null){
+            mp = MediaPlayer.create(this,R.raw.intro);
+            mp.start();
+            mp.setLooping(true);
+        }
+        //Reproducir Cancion Intro
 
         botonlogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent registro = new Intent(MainActivity.this, Registro.class);
                 startActivity(registro);
+                mp.stop();//Detener Cancion
             }
         });
     }
@@ -90,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 entrar.putExtra("puntos", datos[2]+"");
                 startActivity(entrar);
                 MainActivity.this.finish();
+                mp.stop();//Detener Cancion
                 break;
         }
         Toast.makeText(this, respuesta, Toast.LENGTH_LONG).show();

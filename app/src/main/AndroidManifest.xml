@@ -12,7 +12,7 @@
         android:supportsRtl="true">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="reversePortrait"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,26 +22,27 @@
         </activity>
         <activity
             android:name=".Principal"
-            android:screenOrientation="reversePortrait"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemePrincipal" />
         <activity
             android:name=".Creditos"
-            android:screenOrientation="reversePortrait"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeDialog" />
         <activity
             android:name=".Ranking"
-            android:screenOrientation="reversePortrait"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemeRanking" />
         <activity
             android:name=".Registro"
-            android:screenOrientation="reversePortrait"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemePrincipal" />
         <activity
             android:name=".LienzoJuegoActivity"
-            android:screenOrientation="reversePortrait"
+            android:screenOrientation="portrait"
             android:theme="@style/AppThemePrincipal" />
         <activity android:name=".UsuariosDisponibles"
-            android:theme="@style/AppThemeDialog"/>
+            android:theme="@style/AppThemeDialog"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
