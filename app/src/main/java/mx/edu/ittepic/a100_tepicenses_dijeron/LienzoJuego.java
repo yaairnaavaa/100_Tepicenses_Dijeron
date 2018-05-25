@@ -26,7 +26,8 @@ import java.util.Random;
 
 public class LienzoJuego extends View {
     MediaPlayer mp;
-
+    Boolean partidaComenzada;
+    String ganadorPartida;
     int anchoP, altoP, puntospartida;
     String idusuario,nusuario, nomTurno;
     Botones botones[], puntero;
@@ -47,6 +48,7 @@ public class LienzoJuego extends View {
         handler = new Handler();
         puntospartida = 0;
         nomTurno = "";
+        ganadorPartida="";
         numRonda = 1;
         nPregunta = 0;
         pregunta = "Pregunta R1";
@@ -63,8 +65,8 @@ public class LienzoJuego extends View {
         altoP = altopantalla;
         idusuario = id;
         nusuario = usuario;
-        seg = 20;
-        turno = isFinalizado =false;
+        seg = 5;
+        turno = isFinalizado = partidaComenzada = false;
         numpregunta = new ArrayList<>();
         rra = rrb = rrc = rrd = false;
         setBackgroundResource(R.drawable.fondo);
@@ -76,7 +78,7 @@ public class LienzoJuego extends View {
             botones[i] = new Botones(BitmapFactory.decodeResource(getResources(),nombreArchivos[i]),coorx[i],coory[i]);
         }
         puntero = null;
-        timer = new CountDownTimer(21000, 1000) {
+        timer = new CountDownTimer(6000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 seg--;
@@ -84,12 +86,13 @@ public class LienzoJuego extends View {
             }
             @Override
             public void onFinish() {
-                seg = 20;
+                seg = 5;
                 //turno = false;
-                enviarRespuesta(idusuario,"0","0");
+                //enviarRespuesta(idusuario,"0","0");
+                partidaComenzada = true;
                 invalidate();
             }
-        };
+        }.start();
         inicio(-1);
         runnable = new Runnable(){
             @Override
@@ -182,8 +185,6 @@ public class LienzoJuego extends View {
                         if(puntero == botones[0]){
                             if(!rra && nomTurno.equals(nusuario)){
                                 puntospartida += Integer.parseInt(datos.get(4)[1].trim());
-                                //timer.cancel();
-                                //timer.onFinish();
                                 enviarRespuesta(idusuario,"4",datos.get(4)[1]);
                                 rra = true;
                                 mp.start();
@@ -193,8 +194,6 @@ public class LienzoJuego extends View {
                         if(puntero == botones[1]){
                             if(!rrb && nomTurno.equals(nusuario)){
                                 puntospartida += Integer.parseInt(datos.get(1)[1].trim());
-                                //timer.cancel();
-                                //timer.onFinish();
                                 enviarRespuesta(idusuario,"1",datos.get(1)[1]);
                                 rrb = true;
                                 mp.start();
@@ -204,8 +203,6 @@ public class LienzoJuego extends View {
                         if(puntero == botones[2]){
                             if(!rrc && nomTurno.equals(nusuario)){
                                 puntospartida += Integer.parseInt(datos.get(2)[1].trim());
-                                //timer.cancel();
-                                //timer.onFinish();
                                 enviarRespuesta(idusuario,"2",datos.get(2)[1]);
                                 rrc = true;
                                 mp.start();
@@ -215,20 +212,18 @@ public class LienzoJuego extends View {
                         if(puntero == botones[3]){
                             if(!rrd && nomTurno.equals(nusuario)){
                                 puntospartida += Integer.parseInt(datos.get(3)[1].trim());
-                                //timer.cancel();
-                                //timer.onFinish();
                                 enviarRespuesta(idusuario,"3",datos.get(3)[1]);
                                 rrd = true;
                                 mp.start();
                             }
                         }
                         if(puntero == botones[4]){
-                            if(!turno){
-                                //rra = rrb = rrc = rrd = false;
-                                enviarRespuesta(idusuario,"5","0");
-                                turno = true;
-                                //inicio();
-                                //timer.start();
+                            if(partidaComenzada){
+                                if(!turno){
+                                    enviarRespuesta(idusuario,"5","0");
+                                    turno = true;
+                                    partidaComenzada = false;
+                                }
                             }
                         }
                     }
@@ -246,7 +241,7 @@ public class LienzoJuego extends View {
             URL direccion = new URL("https://tpdmagustin.000webhostapp.com/100TD/preguntas.php");
             cw.execute(direccion);
         }catch(MalformedURLException e){
-            Toast.makeText(getContext(), "ERROR", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), "ERROR", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -259,7 +254,7 @@ public class LienzoJuego extends View {
             cwRespuestas.agregarVariable("puntos",puntosPartida);
             cwRespuestas.execute(direccion);
         }catch(MalformedURLException e){
-            Toast.makeText(getContext(), "ERROR", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), "ERROR", Toast.LENGTH_LONG).show();
         }
     }
     public void actualizarVariables(String[] pdiv){
@@ -279,7 +274,7 @@ public class LienzoJuego extends View {
 
     public void procesarRespuesta(String respuesta) {
         if (respuesta.equals("OK")){
-            Toast.makeText(getContext(), respuesta, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), respuesta, Toast.LENGTH_SHORT).show();
             return;
         }
         if (respuesta.equals("TRUE")){
@@ -294,10 +289,11 @@ public class LienzoJuego extends View {
         if (respuesta.contains(",") && !respuesta.contains("#")){
             System.out.println("FALSE");
             String[] resp = respuesta.split(",");
-            if (resp.length == 5) {
-                nomTurno = resp[4];
+            if (resp.length == 6) {
+                nomTurno = resp[5];
             }
             if (nusuario.equals(nomTurno)){turno=true;}else{turno=false;}
+            nPregunta = Integer.parseInt(resp[4])/2;//Comentar esta linea si se quita lo de numero pregunta dinamica
             if (resp[0].equals("1")){
                 rrb = true;
             }
@@ -321,8 +317,8 @@ public class LienzoJuego extends View {
             }
         }
         if (respuesta.contains("¬")) {
-            if (numRonda <= 1) {//5 Rondas
-                if (nPregunta <= 2) {//3 Preguntas
+            if (numRonda <= 1) {//1 Rondas
+                if (nPregunta <= 3) {//3 Preguntas
                     int num = Integer.parseInt(respuesta.split("¬")[1]);
                     limpiarVariables();
                     if (numpregunta.contains(num)) {
@@ -338,12 +334,12 @@ public class LienzoJuego extends View {
                     actualizarVariables(pdiv);
                     enviarRespuesta(idusuario, "6", "0");
                     invalidate();
-                    nPregunta++;
+                    //nPregunta++;//descomentar si se quita lo de numero pregunta dinamica
                     turno = false;
-                    if (nPregunta > 2) {
-                        nPregunta = 1;
+                    if (nPregunta > 3) {
+                        //nPregunta = 1;//descomentar si se quita lo de numero pregunta dinamica
                         if(numRonda < 2){
-                            numRonda++;
+                            //numRonda++;
                         }
                     }
                     return;
@@ -352,7 +348,7 @@ public class LienzoJuego extends View {
             if (!isFinalizado){
                 AlertDialog.Builder finJuego = new AlertDialog.Builder(getContext());
                 finJuego.setTitle("Fin del juego")
-                        .setMessage("El juego ha terminado...")
+                        .setMessage("El juego ha terminado...\nObtuviste: "+puntospartida+" pts.")
                         .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

@@ -138,7 +138,7 @@ public class Principal extends AppCompatActivity {
             dialogo = ProgressDialog.show(Principal.this, "Espere", "Cerrando Sesión...");
             cw.execute(direccion);
         }catch(MalformedURLException e){
-            Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_LONG).show();
         }
     }
     @Override
@@ -215,7 +215,7 @@ public class Principal extends AppCompatActivity {
                 respuesta = "";
             }
         }
-        Toast.makeText(this, respuesta, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, respuesta, Toast.LENGTH_LONG).show();
     }
 
     public void cambiarMensaje(String s) {
